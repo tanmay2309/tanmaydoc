@@ -1,0 +1,546 @@
+ECLIPSE IDE JAVA INPUT & OUTPUT
+ALL PACKAGES AND CLASSES
+ 
+ 
+ 
+
+
+\\JDBCConnection.java 
+
+package config;
+import java.sql.*;
+
+public class JDBCConnection {
+	
+
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        String url="jdbc:sqlserver:DESKTOP-CJ512VJ\\INSTANCE01:1433;databaseName=PCSDB;user=sa1;password=tanmay";
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		Connection conn=DriverManager.getConnection(url);
+		
+		if(conn!=null)
+			System.out.println("Connected");
+		else
+			System.out.println("Not Connected");
+
+	}
+
+
+}
+ 
+
+\\LoginFrame.java
+
+package view;
+
+import view.RegistrationFrame;
+import view.Employee;
+import view.HRWindow;
+import config.JDBCConnection;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class LoginFrame {
+
+	public static void main(String[] args) {
+	   log obj=new log();
+	}
+
+}
+class log extends JFrame implements ActionListener
+{
+	JLabel lTitle, lUser,lPassword,lMessage,lrole;
+	JTextField userid,passwords;
+	JPasswordField tPassword;
+	JButton bLogin,bregister;
+	JComboBox roleCombo;
+		
+	static JDialog dialog;
+	
+	/**
+	 * 
+	 */
+	public log()
+	{
+		String[] role= {"HRA","EMP","PME"};
+		
+		lTitle=new JLabel("Login Here");
+		lTitle.setBounds(180, 20, 150, 25);
+		lUser=new JLabel("User Id");
+		lUser.setBounds(50, 80, 150, 25);
+		lPassword=new JLabel("Password");
+		lPassword.setBounds(50, 160, 150, 25);
+		userid=new JTextField();
+		userid.setBounds(200, 80, 150, 25);
+		passwords=new JPasswordField();
+		passwords.setBounds(200, 160, 150, 25);
+		((JPasswordField) passwords).setEchoChar('*');
+		lrole=new JLabel("Role");
+		lrole.setBounds(50, 200, 150, 25);
+		roleCombo=new JComboBox(role);
+		roleCombo.setBounds(200,200,90,20);
+	    		
+		bLogin=new JButton("Login");
+		bLogin.setBounds(100, 250,150, 25);
+		bLogin.addActionListener(this);
+		bregister=new JButton("Register");
+		bregister.setBounds(250, 250,150, 25);
+		lMessage=new JLabel();
+		lMessage.setBounds(120, 320, 320, 25);
+		dialog=new JDialog(this,"Login",true);
+		
+		add(lTitle);
+		add(lUser);
+		add(lPassword);
+		add(lrole);
+		add(roleCombo);
+		add(userid);
+		add(passwords);
+		add(bLogin);
+		add(bregister);
+		add(lMessage);
+		dialog.add(lMessage);
+		dialog.setSize(350, 200);
+		setSize(500,500);
+		setLayout(null);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+	
+		
+		bregister.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				new RegistrationFrame();
+				
+							}
+		});
+		
+		
+	}
+	@Override
+  
+	public void actionPerformed(ActionEvent e)
+		{
+	
+		if(e.getSource()==bLogin) {                                 
+	        
+	        try {
+	        	//PreparedStatement ps;
+		        ResultSet rs;
+		        	        String query = "SELECT * FROM Employees WHERE Userid =? AND Pass =? AND Role=? And Active='TRUE'";
+		        	      
+		        	        String url="jdbc:sqlserver:DESKTOP-CJ512VJ\\INSTANCE01:1433;databaseName=PCSDB;user=sa1;password=tanmay";
+	        	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	        	Connection conn=DriverManager.getConnection(url);
+
+	        	PreparedStatement ps1=conn.prepareStatement(query);
+	            
+	            ps1.setString(1, userid.getText());
+	            ps1.setString(2, passwords.getText());
+				ps1.setString(3, roleCombo.getSelectedItem().toString());
+	  
+				rs = ps1.executeQuery();
+	            
+
+	            if(rs.next())
+	            {
+		            if(roleCombo.getSelectedItem().equals("HRA"))
+						
+		            {
+		                    HRWindow hra = new HRWindow();
+		                  
+		                    this.dispose();
+		           }
+		            if(roleCombo.getSelectedItem().equals("PME"))
+						
+		            {
+		            	PMWindow pme = new PMWindow();
+		                  
+		                    this.dispose();
+		           }
+		            if(roleCombo.getSelectedItem().equals("EMP"))
+						
+		            {
+		                    Employee emp = new Employee();
+		                  
+		                    this.dispose();
+		           }
+	            }
+	            else
+	                    {
+	                    JOptionPane.showMessageDialog(null, "Incorrect Username Or Password", "Login Failed", 2);
+	                }
+	          
+	        }
+	        catch (SQLException ex) {
+	               Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+        
+	        } catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			}
+		}
+	}
+ 
+
+
+\\main.java
+
+package view;
+
+public class main{
+    public static void main(String[] args)
+    { 
+    	RegistrationFrame obj=new RegistrationFrame();
+    
+    }
+}
+ 
+\\RegistrationFrame.java
+package view;
+import javax.swing.*;
+
+import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.awt.*;
+import java.sql.*;
+ 
+public class RegistrationFrame implements ActionListener {
+	
+	JFrame frame;
+    String[] gender={"M","F"};
+    String[] role= {"HRA","EMP","PME"};
+    JLabel EmailId=new JLabel("Email Id");
+    JLabel FirstName=new JLabel("First Name");
+    JLabel LastName=new JLabel("Last Name");
+    JLabel Gender=new JLabel("Gender");
+    JLabel UserId=new JLabel("User Id");
+    JLabel Password=new JLabel("Password");   
+    JLabel Role=new JLabel("Role");
+    JLabel Mobileno=new JLabel("Mobile No");
+    JTextField Emailid=new JTextField();
+    JTextField firstname=new JTextField();
+    JComboBox genderCombo=new JComboBox(gender);
+    JTextField lastname=new JTextField();
+    JTextField mobileno=new JTextField();
+    JTextField userid=new JTextField();
+    JPasswordField passwords=new JPasswordField();
+    JComboBox roleCombo=new JComboBox(role);
+    JButton registerButton=new JButton("REGISTER");
+    JButton resetButton=new JButton("RESET");
+    
+ 
+    public RegistrationFrame()
+    {
+        createWindow();
+        setLocationAndSize();
+        addComponentsToFrame();
+        actionEvent();
+    }
+    public void createWindow()
+    {
+        frame=new JFrame();
+        frame.setTitle("Registration Form");
+        frame.setBounds(40,40,380,600);
+        frame.getContentPane().setBackground(Color.white);
+        frame.getContentPane().setLayout(null);
+        frame.setVisible(true);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+    }
+    public void setLocationAndSize()
+    {
+    	EmailId.setBounds(20,20,60,70);
+        FirstName.setBounds(20,70,100,70);
+        LastName.setBounds(20,120,100,70);
+        UserId.setBounds(20,170,100,70);
+        Password.setBounds(20,220,140,70);
+        Role.setBounds(20,270,100,70);
+        Gender.setBounds(20,320,100,70);
+        Mobileno.setBounds(20,370,100,70);
+        Emailid.setBounds(180,43,165,23);
+        firstname.setBounds(180,93,165,23);
+        lastname.setBounds(180,143,165,23);
+        userid.setBounds(180,193,165,23);
+        passwords.setBounds(180,243,165,23);
+        roleCombo.setBounds(180,293,165,23);
+        genderCombo.setBounds(180,343,165,23);
+        mobileno.setBounds(180,393,165,23);
+        registerButton.setBounds(70,450,100,35);
+        resetButton.setBounds(220,450,100,35);
+    }
+    public void addComponentsToFrame()
+    {
+        frame.add(EmailId);
+        frame.add(FirstName);
+        frame.add(LastName);
+        frame.add(UserId);
+        frame.add(Password);
+        frame.add(Role);
+        frame.add(Gender);
+        frame.add(Mobileno);
+        frame.add(Emailid);
+        frame.add(firstname);
+        frame.add(lastname);
+        frame.add(userid);
+        frame.add(passwords);
+        frame.add(roleCombo);
+        frame.add(genderCombo);
+        frame.add(mobileno);
+        frame.add(registerButton);
+        frame.add(resetButton);
+    }
+    public void actionEvent()
+    {
+        registerButton.addActionListener(this);
+        resetButton.addActionListener(this);
+    }
+   
+	/**
+	 *
+	 */
+	@Override
+    public void actionPerformed(ActionEvent e) {  	
+ 		
+
+    
+        if(e.getSource()==registerButton)
+        {
+        	try {
+    		Connection conn=DriverManager.getConnection("jdbc:sqlserver:DESKTOP-CJ512VJ\\INSTANCE01;databaseName=pcsdb","sa1","tanmay");
+        		
+        		//Preapared Statement
+    	    PreparedStatement Pstatement=conn.prepareStatement("insert into Employees values(?,?,?,?,?,?,?,?,?)");
+    	  
+                //Specifying the values of it's parameter
+                Pstatement.setString(1,Emailid.getText());
+                Pstatement.setString(2,firstname.getText());
+                Pstatement.setString(3,lastname.getText());
+                Pstatement.setString(4,userid.getText());
+                Pstatement.setString(5,passwords.getText());
+                Pstatement.setString(6,roleCombo.getSelectedItem().toString());
+                Pstatement.setString(7,genderCombo.getSelectedItem().toString());
+                Pstatement.setString(8,"FALSE");
+                Pstatement.setString(9,mobileno.getText());
+                Pstatement.executeUpdate();
+                Statement stmt = conn.createStatement();
+                String sql = "UPDATE Employees SET Active='TRUE' WHERE Role='HRA'";
+                stmt.executeUpdate(sql);
+                
+                JOptionPane.showMessageDialog(null,"Data Registered Successfully");
+                   
+        }
+                     catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+             
+	}
+        if(e.getSource()==resetButton)
+        {
+            //Clearing Fields
+            Emailid.setText("");
+            firstname.setText("");
+            lastname.setText("");
+            userid.setText("");
+            passwords.setText("");
+            roleCombo.setSelectedItem("");
+            genderCombo.setSelectedItem("");
+            mobileno.setText("");
+        } 
+    }
+}
+ 
+\\Emplyee.java
+package view;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+public class Employee implements ActionListener{
+	JFrame frame = new JFrame("Employee Window");
+	JButton Viewdata,Viewjob, Changepass,Logout;
+	public Employee(){
+	createwindow();
+	addtoframe();
+	actionEvent();
+}
+	public void createwindow() {
+		Viewdata= new JButton("View Data");
+		Viewjob= new JButton("View Job");
+		Changepass= new JButton("Change Password");
+		Logout= new JButton("Log Out");
+			    	}
+	public void addtoframe() {
+		frame.add(Viewdata);
+		frame.add(Viewjob);
+		frame.add(Changepass);
+		frame.add(Logout);
+		frame.setLayout(new FlowLayout());
+		frame.setSize(300,300);  
+		frame.setVisible(true);  
+	}
+	public void actionEvent()
+    {
+		Viewdata.addActionListener(this);
+        Viewjob.addActionListener(this);
+        Changepass.addActionListener(this);
+        Logout.addActionListener(this);
+    
+	}
+	public void actionPerformed(ActionEvent e) {  	
+ 		   
+        if(e.getSource()==Viewdata)
+        {        	
+        }
+        if(e.getSource()==Viewjob)
+        {        	
+        }
+        if(e.getSource()==Changepass)
+        {        	
+        }
+        if(e.getSource()==Logout)
+        {      
+        }
+	}
+}
+ 
+\\HRWindow.java
+
+package view;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+public class HRWindow implements ActionListener {
+	JFrame frame = new JFrame("HR Window");
+	JButton Activate,Deactivate, Changepass,Logout;
+	public HRWindow(){
+	createwindow();
+	addtoframe();
+	actionEvent();
+}
+	public void createwindow() {
+		Activate= new JButton("Activate Employee");
+		Deactivate= new JButton("Deactivate Employee");
+		Changepass= new JButton("Change Password");
+		Logout= new JButton("Log Out");
+			    
+	}
+	public void addtoframe() {
+		frame.add(Activate);
+		frame.add(Deactivate);
+		frame.add(Changepass);
+		frame.add(Logout);
+		frame.setLayout(new FlowLayout());
+		frame.setSize(300,300);  
+		frame.setVisible(true);  
+	}
+	public void actionEvent()
+    {
+		Activate.addActionListener(this);
+        Deactivate.addActionListener(this);
+        Changepass.addActionListener(this);
+        Logout.addActionListener(this);
+    }
+	public void actionPerformed(ActionEvent e) {  	
+ 		    
+		if(e.getSource()==Activate)
+        {
+        	
+        }
+        if(e.getSource()==Deactivate)
+        {        	
+        }
+        if(e.getSource()==Changepass)
+        {
+        	        }
+        if(e.getSource()==Logout)
+        {        	
+        }
+	}
+ 
+\\PMWindow.java (project manager):--
+package view;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+public class PMWindow implements ActionListener {
+		JFrame frame = new JFrame("Project Manager Window");
+		JButton Viewdata,Addjob, Changepass,Logout;
+		public void ProjectManager(){
+		createwindow();
+		addtoframe();
+		actionEvent();
+	}
+		public void createwindow() {
+			Viewdata= new JButton("View Data");
+			Addjob= new JButton("Add Job");
+			Changepass= new JButton("Change Password");
+			Logout= new JButton("Log Out");
+				    
+		}
+		public void addtoframe() {
+			frame.add(Viewdata);
+			frame.add(Addjob);
+			frame.add(Changepass);
+			frame.add(Logout);
+			frame.setLayout(new FlowLayout());
+			frame.setSize(300,300);  
+			frame.setVisible(true);  
+
+		}
+		public void actionEvent()
+	    {
+			Viewdata.addActionListener(this);
+	        Addjob.addActionListener(this);
+	        Changepass.addActionListener(this);
+	        Logout.addActionListener(this);
+	    }
+		public void actionPerformed(ActionEvent e) {  	
+	 		
+
+		    
+			if(e.getSource()==Viewdata)
+	        {
+	        	
+	        }
+	        if(e.getSource()==Addjob)
+	        {
+	        	
+	        }
+	        if(e.getSource()==Changepass)
+	        {
+	        	
+	        }
+	        if(e.getSource()==Logout)
+	        {
+	        	
+	        }
+		}
+	}

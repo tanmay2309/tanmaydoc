@@ -1,0 +1,22 @@
+\\JDBCConnection.java 
+
+package config;
+import java.sql.*;
+
+public class JDBCConnection {
+	
+
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        String url="jdbc:sqlserver:DESKTOP-CJ512VJ\\INSTANCE01:1433;databaseName=PCSDB;user=sa1;password=tanmay";
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		Connection conn=DriverManager.getConnection(url);
+		
+		if(conn!=null)
+			System.out.println("Connected");
+		else
+			System.out.println("Not Connected");
+
+	}
+
+
+}

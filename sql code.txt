@@ -1,0 +1,47 @@
+create database PSCDB
+use PCSDB
+ 
+create table Employees(
+empid int primary key identity(1,1),
+Emailid varchar(30),
+Firstname varchar(30),
+Lastname varchar(30),
+Userid varchar(30), 
+Pass varchar(30),
+Role varchar(30),
+Gender varchar(30),
+Active varchar(30),
+Mobileno varchar(30));
+select *from Employees
+ 
+
+
+CREATE TABLE job (
+    jobid float primary key,
+    jobtitle varchar(30),
+    jobdesc varchar(30),
+    companyName varchar(30),
+	 cLocation varchar(30),
+	  keySkill varchar(30),
+	   salary varchar(30),
+	   active varchar(30)
+	    
+);
+ 
+select *from job
+ insert into job values(101,'EMP','Fresher','abc','mumbai','c++','23000','yes') 
+  insert into job values(102,'HRA','permanent','abc','pune','java','72000','no') 
+ 
+
+
+CREATE TABLE skill (
+    skillid float primary key,
+    skillname varchar(30),
+    skilldesc varchar(30),
+    active varchar(30)
+);
+ 
+select *from skill
+ insert into skill values(1,'c++','visualstudios','yes') 
+  insert into skill values(2,'java','eclipse','yes') 
+   insert into skill values(3,'angular&java','tanmay','yes')

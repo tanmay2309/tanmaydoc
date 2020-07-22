@@ -1,0 +1,54 @@
+\\Emplyee.java
+package view;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+public class Employee implements ActionListener{
+	JFrame frame = new JFrame("Employee Window");
+	JButton Viewdata,Viewjob, Changepass,Logout;
+	public Employee(){
+	createwindow();
+	addtoframe();
+	actionEvent();
+}
+	public void createwindow() {
+		Viewdata= new JButton("View Data");
+		Viewjob= new JButton("View Job");
+		Changepass= new JButton("Change Password");
+		Logout= new JButton("Log Out");
+			    	}
+	public void addtoframe() {
+		frame.add(Viewdata);
+		frame.add(Viewjob);
+		frame.add(Changepass);
+		frame.add(Logout);
+		frame.setLayout(new FlowLayout());
+		frame.setSize(300,300);  
+		frame.setVisible(true);  
+	}
+	public void actionEvent()
+    {
+		Viewdata.addActionListener(this);
+        Viewjob.addActionListener(this);
+        Changepass.addActionListener(this);
+        Logout.addActionListener(this);
+    
+	}
+	public void actionPerformed(ActionEvent e) {  	
+ 		   
+        if(e.getSource()==Viewdata)
+        {        	
+        }
+        if(e.getSource()==Viewjob)
+        {        	
+        }
+        if(e.getSource()==Changepass)
+        {        	
+        }
+        if(e.getSource()==Logout)
+        {      
+        }
+	}
+}

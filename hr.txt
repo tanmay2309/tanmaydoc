@@ -1,0 +1,56 @@
+\\HRWindow.java
+
+package view;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+public class HRWindow implements ActionListener {
+	JFrame frame = new JFrame("HR Window");
+	JButton Activate,Deactivate, Changepass,Logout;
+	public HRWindow(){
+	createwindow();
+	addtoframe();
+	actionEvent();
+}
+	public void createwindow() {
+		Activate= new JButton("Activate Employee");
+		Deactivate= new JButton("Deactivate Employee");
+		Changepass= new JButton("Change Password");
+		Logout= new JButton("Log Out");
+			    
+	}
+	public void addtoframe() {
+		frame.add(Activate);
+		frame.add(Deactivate);
+		frame.add(Changepass);
+		frame.add(Logout);
+		frame.setLayout(new FlowLayout());
+		frame.setSize(300,300);  
+		frame.setVisible(true);  
+	}
+	public void actionEvent()
+    {
+		Activate.addActionListener(this);
+        Deactivate.addActionListener(this);
+        Changepass.addActionListener(this);
+        Logout.addActionListener(this);
+    }
+	public void actionPerformed(ActionEvent e) {  	
+ 		    
+		if(e.getSource()==Activate)
+        {
+        	
+        }
+        if(e.getSource()==Deactivate)
+        {        	
+        }
+        if(e.getSource()==Changepass)
+        {
+        	        }
+        if(e.getSource()==Logout)
+        {        	
+        }
+	}
